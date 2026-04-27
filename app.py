@@ -864,8 +864,10 @@ def mindmap():
     return jsonify({'center': doc['filename'].replace('.pdf', ''),
                     'branches': [{'label': t, 'children': []} for t in terms[:6]]})
 
+# This ensures DB is created on Render too (gunicorn doesn't run __main__)
+init_db()
+
 if __name__ == '__main__':
-    init_db()
     print('\n🚀 EduRAG v2 → http://127.0.0.1:5000')
     print(f'✅ Groq ready — model: {GROQ_MODEL}')
     print(f'🔐 Teacher registration code: {os.environ.get("TEACHER_SECRET", "TEACH2025")}')
