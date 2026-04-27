@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>EduRAG – Login</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#05070d;--card:#0c1020;--border:#1a2238;--a:#6c63ff;--a2:#4f46e5;--text:#dde6ff;--muted:#3d4e70;--ok:#10b981;--err:#f43f5e;--warn:#f59e0b;}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;}
+.wrap{width:100%;max-width:420px;}
+.logo{text-align:center;margin-bottom:32px;}
+.logo-icon{width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,var(--a2),var(--a));display:flex;align-items:center;justify-content:center;font-size:26px;margin:0 auto 12px;}
+.logo h1{font-family:'Instrument Serif',serif;font-style:italic;font-size:28px;color:#fff;}
+.logo p{font-size:12px;color:var(--muted);margin-top:3px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;}
+/* tabs */
+.tabs{display:flex;margin-bottom:24px;background:#030508;border-radius:10px;padding:3px;gap:3px;}
+.tab{flex:1;padding:8px;border-radius:8px;text-align:center;cursor:pointer;font-size:12px;font-weight:700;color:var(--muted);transition:.2s;border:none;background:none;font-family:'Space Grotesk',sans-serif;}
+.tab.on{background:var(--card);color:var(--text);box-shadow:0 1px 6px rgba(0,0,0,.4);}
+/* mode tabs (signin/signup) */
+.mode-tabs{display:flex;gap:6px;margin-bottom:20px;}
+.mtab{flex:1;padding:9px;border-radius:9px;text-align:center;cursor:pointer;font-size:12px;font-weight:700;border:1px solid var(--border);color:var(--muted);transition:.2s;background:none;font-family:'Space Grotesk',sans-serif;}
+.mtab.on{border-color:var(--a);color:var(--a);background:rgba(108,99,255,.08);}
+/* form */
+.field{margin-bottom:14px;}
+.field label{display:block;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.field input{width:100%;background:#030508;border:1px solid var(--border);border-radius:9px;padding:11px 13px;color:var(--text);font-size:13px;font-family:'Space Grotesk',sans-serif;outline:none;transition:.2s;}
+.field input:focus{border-color:var(--a);}
+.field input::placeholder{color:var(--muted);}
+.btn-main{width:100%;padding:13px;border-radius:9px;border:none;background:linear-gradient(135deg,var(--a2),var(--a));color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:.2s;margin-top:6px;}
+.btn-main:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(108,99,255,.35);}
+.btn-main:disabled{opacity:.5;transform:none;}
+/* teacher special button */
+.btn-teacher{background:linear-gradient(135deg,#b45309,#f59e0b);color:#000;}
+/* alerts */
+.alert{border-radius:9px;padding:11px 14px;font-size:12px;margin-bottom:14px;display:flex;align-items:flex-start;gap:8px;}
+.alert.err{background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.25);color:var(--err);}
+.alert.ok{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.25);color:var(--ok);}
+.alert.warn{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.25);color:var(--warn);}
+.alert.hidden{display:none;}
+/* teacher code info */
+.tc-info{background:rgba(245,158,11,.06);border:1px solid rgba(245,158,11,.2);border-radius:9px;padding:10px 13px;font-size:11px;color:var(--warn);margin-bottom:14px;line-height:1.6;}
+/* role badge */
+.role-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.rb-student{background:rgba(108,99,255,.12);border:1px solid rgba(108,99,255,.3);color:var(--a);}
+.rb-teacher{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.3);color:var(--warn);}
+/* security notice */
+.sec-notice{background:rgba(244,63,94,.06);border:1px solid rgba(244,63,94,.2);border-radius:9px;padding:10px 13px;font-size:11px;color:#f87171;margin-bottom:14px;line-height:1.6;}
+.divider{height:1px;background:var(--border);margin:18px 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">
+    <div class="logo-icon">📚</div>
+    <h1>EduRAG</h1>
+    <p>AI-Powered Learning Platform</p>
+  </div>
+
+  <div class="card">
+    <!-- Role Tabs -->
+    <div class="tabs">
+      <button class="tab on" id="tab-student" onclick="setRole('student')">🎓 Student</button>
+      <button class="tab" id="tab-teacher" onclick="setRole('teacher')">👨‍🏫 Teacher</button>
+    </div>
+
+    <!-- Alert box -->
+    <div class="alert hidden" id="alert-box">
+      <span id="alert-icon">⚠️</span>
+      <span id="alert-msg"></span>
+    </div>
+
+    <!-- Mode tabs -->
+    <div class="mode-tabs">
+      <button class="mtab on" id="mt-signin" onclick="setMode('signin')">Sign In</button>
+      <button class="mtab" id="mt-signup" onclick="setMode('signup')">Sign Up</button>
+    </div>
+
+    <!-- SIGN IN form -->
+    <div id="form-signin">
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="si-user" placeholder="Enter username" autocomplete="username">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="si-pass" placeholder="Enter password" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')doSignin()">
+      </div>
+      <button class="btn-main" id="si-btn" onclick="doSignin()">Sign In →</button>
+    </div>
+
+    <!-- SIGN UP form -->
+    <div id="form-signup" style="display:none">
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="su-user" placeholder="Choose a username" autocomplete="username">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" id="su-pass" placeholder="Minimum 4 characters" autocomplete="new-password">
+      </div>
+      <!-- Teacher code field (hidden for students) -->
+      <div class="field" id="tc-field" style="display:none">
+        <label>Teacher Registration Code</label>
+        <div class="tc-info">🔐 A registration code is required to create a teacher account. Contact your administrator to get the code.</div>
+        <input type="password" id="su-code" placeholder="Enter teacher code"
+          onkeydown="if(event.key==='Enter')doSignup()">
+      </div>
+      <button class="btn-main" id="su-btn" onclick="doSignup()">Create Account →</button>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:16px;font-size:11px;color:var(--muted);">
+    🔒 Secure · Role-separated portals · AI-powered learning
+  </div>
+</div>
+
+<script>
+let currentRole = 'student';
+let currentMode = 'signin';
+
+// Check URL for error params
+window.onload = () => {
+  const params = new URLSearchParams(window.location.search);
+  const err = params.get('error');
+  if (err === 'teacher_only') {
+    showAlert('🚫 Access Denied: The Teacher Portal is restricted to teacher accounts only. Please sign in with a teacher account.', 'err');
+  } else if (err === 'unauthorized') {
+    showAlert('🚫 Access Denied: You do not have permission to access that page.', 'err');
+  }
+};
+
+function setRole(role) {
+  currentRole = role;
+  document.getElementById('tab-student').classList.toggle('on', role === 'student');
+  document.getElementById('tab-teacher').classList.toggle('on', role === 'teacher');
+  // Show teacher code field in signup
+  document.getElementById('tc-field').style.display = (role === 'teacher' && currentMode === 'signup') ? 'block' : 'none';
+  // Update button style
+  const siBtn = document.getElementById('si-btn');
+  const suBtn = document.getElementById('su-btn');
+  if (role === 'teacher') {
+    siBtn.classList.add('btn-teacher');
+    suBtn.classList.add('btn-teacher');
+    siBtn.textContent = '👨‍🏫 Teacher Sign In →';
+    suBtn.textContent = '👨‍🏫 Create Teacher Account →';
+  } else {
+    siBtn.classList.remove('btn-teacher');
+    suBtn.classList.remove('btn-teacher');
+    siBtn.textContent = 'Sign In →';
+    suBtn.textContent = 'Create Account →';
+  }
+  clearAlert();
+}
+
+function setMode(mode) {
+  currentMode = mode;
+  document.getElementById('mt-signin').classList.toggle('on', mode === 'signin');
+  document.getElementById('mt-signup').classList.toggle('on', mode === 'signup');
+  document.getElementById('form-signin').style.display = mode === 'signin' ? 'block' : 'none';
+  document.getElementById('form-signup').style.display = mode === 'signup' ? 'block' : 'none';
+  document.getElementById('tc-field').style.display = (currentRole === 'teacher' && mode === 'signup') ? 'block' : 'none';
+  clearAlert();
+}
+
+function showAlert(msg, type) {
+  const box = document.getElementById('alert-box');
+  const icon = document.getElementById('alert-icon');
+  const txt  = document.getElementById('alert-msg');
+  box.className = `alert ${type}`;
+  icon.textContent = type === 'err' ? '🚫' : type === 'ok' ? '✅' : '⚠️';
+  txt.textContent  = msg;
+}
+function clearAlert() {
+  document.getElementById('alert-box').className = 'alert hidden';
+}
+
+async function doSignin() {
+  const username = document.getElementById('si-user').value.trim();
+  const password = document.getElementById('si-pass').value.trim();
+  if (!username || !password) { showAlert('Please fill in all fields.', 'warn'); return; }
+  const btn = document.getElementById('si-btn');
+  btn.disabled = true; btn.textContent = '⏳ Signing in...';
+  try {
+    const r = await fetch('/signin', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password, role: currentRole})
+    });
+    const d = await r.json();
+    if (d.success) {
+      showAlert(`✅ Welcome back! Redirecting to ${d.role} portal...`, 'ok');
+      setTimeout(() => { window.location.href = d.role === 'teacher' ? '/teacher' : '/student'; }, 800);
+    } else {
+      showAlert(d.error || 'Sign in failed.', 'err');
+      btn.disabled = false;
+      setRole(currentRole); // restore button text
+    }
+  } catch(e) {
+    showAlert('Connection error. Please try again.', 'err');
+    btn.disabled = false;
+    setRole(currentRole);
+  }
+}
+
+async function doSignup() {
+  const username    = document.getElementById('su-user').value.trim();
+  const password    = document.getElementById('su-pass').value.trim();
+  const teacher_code = document.getElementById('su-code').value.trim();
+  if (!username || !password) { showAlert('Please fill in all fields.', 'warn'); return; }
+  if (currentRole === 'teacher' && !teacher_code) {
+    showAlert('Teacher registration code is required.', 'warn'); return;
+  }
+  const btn = document.getElementById('su-btn');
+  btn.disabled = true; btn.textContent = '⏳ Creating account...';
+  try {
+    const r = await fetch('/signup', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username, password, role: currentRole, teacher_code})
+    });
+    const d = await r.json();
+    if (d.success) {
+      showAlert(`✅ Account created! Redirecting to ${d.role} portal...`, 'ok');
+      setTimeout(() => { window.location.href = d.role === 'teacher' ? '/teacher' : '/student'; }, 800);
+    } else {
+      showAlert(d.error || 'Sign up failed.', 'err');
+      btn.disabled = false;
+      setRole(currentRole);
+    }
+  } catch(e) {
+    showAlert('Connection error. Please try again.', 'err');
+    btn.disabled = false;
+    setRole(currentRole);
+  }
+}
+</script>
+</body>
+</html>
